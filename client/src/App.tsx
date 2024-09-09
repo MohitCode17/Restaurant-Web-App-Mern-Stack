@@ -1,10 +1,9 @@
-import { Button } from "./components/ui/button"
+import Login from "./pages/auth/Login"
 
 const App = () => {
   return (
     <>
-    <h1 className="text-blue-400">Let's Create Food App</h1>
-    <Button className="bg-orange hover:bg-hoverOrange">Click Here</Button>
+    <Login/>
     </>
   )
 }
