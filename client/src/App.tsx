@@ -1,9 +1,9 @@
-import Login from "./pages/auth/Login"
+import Signup from "./pages/auth/Signup"
 
 const App = () => {
   return (
     <>
-    <Login/>
+    <Signup/>
     </>
   )
 }
