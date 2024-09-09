@@ -4,20 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, LockKeyhole, Mail } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
-
-type LoginInputState = {
-  email: string;
-  password: string;
-};
+import { LoginInputState, userLoginSchema } from "@/schema/userSchema";
 
 const Login = () => {
-  const emailError = false;
-  const passwordError = false;
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState<LoginInputState>({
     email: "",
     password: "",
   });
+
+  const [error, setError] = useState<Partial<LoginInputState>>({});
 
   // INPUT CHANGE HANDLER
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +24,16 @@ const Login = () => {
   // SUBMIT HANDLER
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    // 1. LOGIN FORM VALIDATION
+    const result = userLoginSchema.safeParse(input);
+
+    if (!result.success) {
+      const fieldErrors = result.error.formErrors.fieldErrors;
+      setError(fieldErrors as Partial<LoginInputState>);
+      return;
+    }
+    // 2. API IMPLEMENTATION
     console.log(input);
   };
 
@@ -52,9 +58,9 @@ const Login = () => {
               onChange={handleInputChange}
             />
             <Mail className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {emailError && (
+            {error && (
               <span className="text-sm text-red-500 font-semibold">
-                *Email is required
+                {error.email}
               </span>
             )}
           </div>
@@ -70,9 +76,9 @@ const Login = () => {
               onChange={handleInputChange}
             />
             <LockKeyhole className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {passwordError && (
+            {error && (
               <span className="text-sm text-red-500 font-semibold">
-                Password is required
+                {error.password}
               </span>
             )}
           </div>

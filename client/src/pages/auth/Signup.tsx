@@ -1,22 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { SignupInputState, userSignupSchema } from "@/schema/userSchema";
 import { Loader2, LockKeyhole, Mail, PhoneOutgoing, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
-type SignupInputState = {
-  fullname: string;
-  email: string;
-  password: string;
-  contact: string;
-};
-
 const Signup = () => {
-  const fullnameError = false;
-  const emailError = false;
-  const passwordError = false;
-  const contactError = false;
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState<SignupInputState>({
     fullname: "",
@@ -24,6 +14,17 @@ const Signup = () => {
     password: "",
     contact: "",
   });
+  /*
+    Partial<SignupInputState> is a TypeScript utility type that makes all the properties of the SignupInputState type optional.
+    Equivalent to:
+    {
+      fullname?: string;
+      email?: string;
+      password?: string;
+      contact?: string;
+    }
+  */
+  const [error, setError] = useState<Partial<SignupInputState>>({});
 
   // INPUT CHANGE HANDLER
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +35,16 @@ const Signup = () => {
   // SUBMIT HANDLER
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    // 1. SIGNUP FORM VALIDATEION
+    const result = userSignupSchema.safeParse(input);
+    // RESULT WILL BE TRUE OR FALSE
+    if (!result.success) {
+      const fieldErrors = result.error.formErrors.fieldErrors;
+      setError(fieldErrors as Partial<SignupInputState>);
+      return;
+    }
+    // 2. API IMPLEMENTATION
     console.log(input);
   };
 
@@ -60,9 +71,9 @@ const Signup = () => {
               onChange={handleInputChange}
             />
             <User className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {fullnameError && (
+            {error && (
               <span className="text-sm text-red-500 font-semibold">
-                *Fullname is required
+                {error.fullname}
               </span>
             )}
           </div>
@@ -78,9 +89,9 @@ const Signup = () => {
               onChange={handleInputChange}
             />
             <Mail className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {emailError && (
+            {error && (
               <span className="text-sm text-red-500 font-semibold">
-                *Email is required
+                {error.email}
               </span>
             )}
           </div>
@@ -96,9 +107,9 @@ const Signup = () => {
               onChange={handleInputChange}
             />
             <LockKeyhole className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {passwordError && (
+            {error && (
               <span className="text-sm text-red-500 font-semibold">
-                Password is required
+                {error.password}
               </span>
             )}
           </div>
@@ -114,9 +125,9 @@ const Signup = () => {
               onChange={handleInputChange}
             />
             <PhoneOutgoing className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {contactError && (
+            {error && (
               <span className="text-sm text-red-500 font-semibold">
-                Contact number is required
+                {error.contact}
               </span>
             )}
           </div>
