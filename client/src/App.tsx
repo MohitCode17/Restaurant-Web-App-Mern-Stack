@@ -6,11 +6,19 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Navbar />,
+    element: <MainLayout />,
+
+    children: [
+      {
+        path: "/",
+        element: <Hero />,
+      },
+    ],
   },
   {
     path: "/login",
