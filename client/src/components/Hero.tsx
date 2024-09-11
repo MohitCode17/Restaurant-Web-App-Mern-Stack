@@ -3,9 +3,11 @@ import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Button } from "./ui/button";
 import HeroImage from "@/assets/hero.png";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [searchText, setSearchText] = useState("");
+  const navigate = useNavigate();
   return (
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:p-10 rounded-lg items-center justify-center m-4 gap-16 md:gap-28 px-2 mt-16 md:mt-10">
       <div className="flex flex-col gap-10 md:w-[40%]">
@@ -30,7 +32,12 @@ const Hero = () => {
             className="pl-10 shadow-lg"
           />
           <Search className="text-gray-500 absolute inset-y-2 left-2" />
-          <Button className="bg-orange hover:bg-hoverOrange">Search</Button>
+          <Button
+            onClick={() => navigate(`/search/${searchText}`)}
+            className="bg-orange hover:bg-hoverOrange"
+          >
+            Search
+          </Button>
         </div>
       </div>
 
