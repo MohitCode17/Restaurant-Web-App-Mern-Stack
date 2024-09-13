@@ -54,7 +54,7 @@ const AddMenu = () => {
   });
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
-  const [selectedMenu, setSelectedMenu] = useState<any>();
+  const [selectedMenu, setSelectedMenu] = useState<MenuFormType>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Partial<MenuFormType>>({});
 

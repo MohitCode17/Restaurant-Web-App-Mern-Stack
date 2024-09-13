@@ -26,7 +26,7 @@ const EditMenu = ({
 }: {
   editOpen: boolean;
   setEditOpen: Dispatch<SetStateAction<boolean>>;
-  selectedMenu: any;
+  selectedMenu: MenuFormType | undefined;
 }) => {
   const [input, setInput] = useState<MenuFormType>({
     name: "",
@@ -60,7 +60,7 @@ const EditMenu = ({
     setInput({
       name: selectedMenu?.name || "",
       description: selectedMenu?.description || "",
-      price: selectedMenu?.price || "",
+      price: selectedMenu?.price || 0,
       image: undefined,
     });
   }, [selectedMenu]);
