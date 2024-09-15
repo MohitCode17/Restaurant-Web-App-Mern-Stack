@@ -124,3 +124,41 @@ export const handleLogoutUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+// VERIFY EMAIL CONTROLLER
+export const handleVerifyEmail = async (req: Request, res: Response) => {
+  try {
+    // GETTING VERIFICATION CODE
+    const { verificationCode } = req.body;
+
+    const user = await User.findOne({
+      verificationToken: verificationCode,
+      verificationTokenExpiresAt: { $gt: Date.now() },
+    }).select("-password");
+
+    if (!user)
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification token",
+      });
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpiresAt = undefined;
+    await user.save();
+
+    // SEND WELCOME EMAIL
+    // await sendWelcomeEmail()
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};

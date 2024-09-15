@@ -3,6 +3,7 @@ import {
   handleLoginUser,
   handleLogoutUser,
   handleRegisterUser,
+  handleVerifyEmail,
 } from "../controllers/user.controller";
 
 const router = express.Router();
@@ -15,5 +16,8 @@ router.post("/login", handleLoginUser);
 
 // LOGOUT USER ROUTE
 router.post("/logout", handleLogoutUser);
+
+// VERIFY EMAIL ROUTE
+router.post("/verify-email", handleVerifyEmail);
 
 export default router;
