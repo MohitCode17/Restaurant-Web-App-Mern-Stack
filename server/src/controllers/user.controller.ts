@@ -60,4 +60,54 @@ export const handleRegisterUser = async (req: Request, res: Response) => {
   }
 };
 // LOGIN USER CONTROLLER
+export const handleLoginUser = async (req: Request, res: Response) => {
+  try {
+    // GETTING DATA FOR LOGIN USER
+    const { email, password } = req.body;
+
+    // FIND USER WITH EMAIL
+    const user = await User.findOne({ email });
+
+    // THROW ERROR IF USER NOT FOUND - DURING LOGIN USER SHOULD HAVE REGISTER FIRST
+    if (!user)
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+
+    // CHECK PASSWORD WITH PASSWORD, WHICH WAS PROVIDED DURING REGISTRATION
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+    // THROW ERROR IF PASSWORD WRONG
+    if (!isPasswordMatch)
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+
+    // GENERATE AUTH TOKEN
+    generateToken(res, user);
+
+    // UPDATE LAST LOGIN STATUS
+    user.lastLogin = new Date();
+    await user.save();
+
+    // REMOVE PASSWORD FROM USER OBJECT BEFORE SENDING TO FRONTEND
+    const userWithoutPassword = await User.findOne({ email }).select(
+      "-password"
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: `Welcome back, ${user.fullname}`,
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 // LOGOUT USER CONTROLLER
