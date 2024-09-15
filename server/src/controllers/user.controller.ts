@@ -111,3 +111,16 @@ export const handleLoginUser = async (req: Request, res: Response) => {
 };
 
 // LOGOUT USER CONTROLLER
+export const handleLogoutUser = async (req: Request, res: Response) => {
+  try {
+    return res.clearCookie("authToken").status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
