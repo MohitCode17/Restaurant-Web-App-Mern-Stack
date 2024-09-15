@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.model";
 import { generateToken } from "../utils/generateToken";
 import { generateVerificationCode } from "../utils/generateVerificationCode";
+import crypto from "crypto";
 
 // REGISTER USER CONTROLLER
 export const handleRegisterUser = async (req: Request, res: Response) => {
@@ -154,6 +155,44 @@ export const handleVerifyEmail = async (req: Request, res: Response) => {
       success: true,
       message: "Email verified successfully",
       user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// FORGOT PASSWORD CONTROLLER
+export const handleForgotPassword = async (req: Request, res: Response) => {
+  try {
+    // GETTING EMAIL
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res.status(400).json({
+        success: false,
+        message: "User doesn't exist",
+      });
+
+    // GENERATE RESET TOKEN
+    const resetToken = crypto.randomBytes(40).toString("hex");
+
+    const resetTokenExpiresAt = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hour
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordTokenExpiresAt = resetTokenExpiresAt;
+    await user.save();
+
+    // SENT RESET PASSWORD MAIL
+    // await sendResetPasswordMail()
+
+    return res.status(200).json({
+      success: true,
+      message: "Password reset link sent to your email",
     });
   } catch (error) {
     return res.status(500).json({

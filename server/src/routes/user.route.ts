@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  handleForgotPassword,
   handleLoginUser,
   handleLogoutUser,
   handleRegisterUser,
@@ -19,5 +20,8 @@ router.post("/logout", handleLogoutUser);
 
 // VERIFY EMAIL ROUTE
 router.post("/verify-email", handleVerifyEmail);
+
+// FORGOT PASSWORD ROUTE
+router.post("/forgot-password", handleForgotPassword);
 
 export default router;
