@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  checkAuth,
   handleForgotPassword,
   handleLoginUser,
   handleLogoutUser,
@@ -27,5 +28,8 @@ router.post("/forgot-password", handleForgotPassword);
 
 // RESET PASSWORD ROUTE
 router.post("/reset-password/:token", handleResetPassword);
+
+// CHECK USER AUTH STATUS ROUTE
+router.get("/check-auth", checkAuth);
 
 export default router;

@@ -202,6 +202,7 @@ export const handleForgotPassword = async (req: Request, res: Response) => {
   }
 };
 
+// RESET PASSWORD CONTROLLER
 export const handleResetPassword = async (req: Request, res: Response) => {
   try {
     // GETTING RESET PASSWORD TOKEN & NEW PASSWORD
@@ -233,6 +234,31 @@ export const handleResetPassword = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "Password reset successfully.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// CHECK AUTH FOR USER CONTROLLER
+export const checkAuth = async (req: Request, res: Response) => {
+  try {
+    const userId = req.id; // TO BE IMPLEMENT - USER AUTHENTICATION MIDDLEWARE PROCESS
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+
+    return res.status(200).json({
+      success: true,
+      user,
     });
   } catch (error) {
     return res.status(500).json({
