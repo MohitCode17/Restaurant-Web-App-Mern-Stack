@@ -246,7 +246,8 @@ export const handleResetPassword = async (req: Request, res: Response) => {
 // CHECK AUTH FOR USER CONTROLLER
 export const checkAuth = async (req: Request, res: Response) => {
   try {
-    const userId = req.id; // TO BE IMPLEMENT - USER AUTHENTICATION MIDDLEWARE PROCESS
+    const userId = "FDLFJDLJFLDJF"; // TO BE REMOVED
+    // const userId = req.id; // TO BE IMPLEMENT - USER AUTHENTICATION MIDDLEWARE PROCESS
 
     const user = await User.findById(userId).select("-password");
 
@@ -258,6 +259,44 @@ export const checkAuth = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// UPDATE PROFILE CONTROLLER
+export const handleUpdateProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = "fdlsjfldjfl"; // TO BE REMOVED
+    // const userId = req.id; // TO BE IMPLEMENT - USER AUTHENTICATION MIDDLEWARE
+
+    // GETTING VALUE FOR UPDATE
+    const { fullname, email, address, city, country, profilePicture } =
+      req.body;
+
+    // TO DO CLOUDINARY SETUP
+
+    const updateData = {
+      fullname,
+      email,
+      address,
+      city,
+      country,
+      profilePicture,
+    };
+
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-password");
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
       user,
     });
   } catch (error) {

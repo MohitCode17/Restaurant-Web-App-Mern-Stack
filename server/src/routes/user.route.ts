@@ -6,6 +6,7 @@ import {
   handleLogoutUser,
   handleRegisterUser,
   handleResetPassword,
+  handleUpdateProfile,
   handleVerifyEmail,
 } from "../controllers/user.controller";
 
@@ -31,5 +32,8 @@ router.post("/reset-password/:token", handleResetPassword);
 
 // CHECK USER AUTH STATUS ROUTE
 router.get("/check-auth", checkAuth);
+
+// UPDATE PROFILE ROUTE
+router.put("/profile/update", handleUpdateProfile);
 
 export default router;
