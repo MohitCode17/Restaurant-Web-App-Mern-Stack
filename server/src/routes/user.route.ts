@@ -4,6 +4,7 @@ import {
   handleLoginUser,
   handleLogoutUser,
   handleRegisterUser,
+  handleResetPassword,
   handleVerifyEmail,
 } from "../controllers/user.controller";
 
@@ -23,5 +24,8 @@ router.post("/verify-email", handleVerifyEmail);
 
 // FORGOT PASSWORD ROUTE
 router.post("/forgot-password", handleForgotPassword);
+
+// RESET PASSWORD ROUTE
+router.post("/reset-password/:token", handleResetPassword);
 
 export default router;

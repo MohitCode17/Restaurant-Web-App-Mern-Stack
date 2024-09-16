@@ -201,3 +201,43 @@ export const handleForgotPassword = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const handleResetPassword = async (req: Request, res: Response) => {
+  try {
+    // GETTING RESET PASSWORD TOKEN & NEW PASSWORD
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordTokenExpiresAt: { $gt: Date.now() },
+    });
+
+    // THROW AN ERROR - TOKEN IS EXPIRED OR NOT FOUND
+    if (!user)
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired reset token",
+      });
+
+    // UPDATE PASSWORD
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpiresAt = undefined;
+    await user.save();
+
+    // SEND SUCCESS RESET EMAIL
+    // await sendSuccessResetEmail()
+
+    return res.status(200).json({
+      success: true,
+      message: "Password reset successfully.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
