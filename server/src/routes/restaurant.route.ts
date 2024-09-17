@@ -4,6 +4,7 @@ import {
   handleCreateRestaurant,
   handleGetRestaurant,
   handleGetRestaurantOrder,
+  handleUpdateOrderStatus,
   handleUpdateRestaurant,
 } from "../controllers/restaurant.controller";
 
@@ -20,5 +21,8 @@ router.put("/", authenticated, handleUpdateRestaurant);
 
 // GET ORDERS ROUTE
 router.get("/order", authenticated, handleGetRestaurantOrder);
+
+// UPDATE ORDER STATUS ROUTE
+router.put("/order/:orderId/status", authenticated, handleUpdateOrderStatus);
 
 export default router;

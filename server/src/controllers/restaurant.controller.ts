@@ -140,3 +140,31 @@ export const handleGetRestaurantOrder = async (req: Request, res: Response) => {
     });
   }
 };
+
+// UPDATE ORDER STATUS CONTROLLER
+export const handleUpdateOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = await Order.findById(orderId);
+
+    if (!order)
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+
+    order.status = status;
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order status updated",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
