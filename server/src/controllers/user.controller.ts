@@ -4,6 +4,13 @@ import User from "../models/user.model";
 import { generateToken } from "../utils/generateToken";
 import { generateVerificationCode } from "../utils/generateVerificationCode";
 import crypto from "crypto";
+import {
+  sendResetPasswordEmail,
+  sendResetPasswordSuccessEmail,
+  sendVerificationEmail,
+  sendWelcomeEmail,
+} from "../mailtrap/email";
+import { config } from "../config/config";
 
 // REGISTER USER CONTROLLER
 export const handleRegisterUser = async (req: Request, res: Response) => {
@@ -41,7 +48,7 @@ export const handleRegisterUser = async (req: Request, res: Response) => {
     generateToken(res, user);
 
     // SEND VERIFICATION EMAIL
-    // await sendVerificationEmail(email, verificationToken);
+    await sendVerificationEmail(email, verificationToken);
 
     // REMOVE PASSWORD FROM USER OBJECT BEFORE SENDING TO FRONTEND
     const userWithoutPassword = await User.findOne({ email }).select(
@@ -149,7 +156,7 @@ export const handleVerifyEmail = async (req: Request, res: Response) => {
     await user.save();
 
     // SEND WELCOME EMAIL
-    // await sendWelcomeEmail()
+    await sendWelcomeEmail(user.email, user.fullname);
 
     return res.status(200).json({
       success: true,
@@ -188,7 +195,10 @@ export const handleForgotPassword = async (req: Request, res: Response) => {
     await user.save();
 
     // SENT RESET PASSWORD MAIL
-    // await sendResetPasswordMail()
+    await sendResetPasswordEmail(
+      user.email,
+      `${config.frontend_url}/resetPassword/${resetToken}`
+    );
 
     return res.status(200).json({
       success: true,
@@ -229,7 +239,7 @@ export const handleResetPassword = async (req: Request, res: Response) => {
     await user.save();
 
     // SEND SUCCESS RESET EMAIL
-    // await sendSuccessResetEmail()
+    await sendResetPasswordSuccessEmail(user.email);
 
     return res.status(200).json({
       success: true,
