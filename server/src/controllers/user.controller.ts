@@ -246,8 +246,8 @@ export const handleResetPassword = async (req: Request, res: Response) => {
 // CHECK AUTH FOR USER CONTROLLER
 export const checkAuth = async (req: Request, res: Response) => {
   try {
-    const userId = "FDLFJDLJFLDJF"; // TO BE REMOVED
-    // const userId = req.id; // TO BE IMPLEMENT - USER AUTHENTICATION MIDDLEWARE PROCESS
+    // GETTING USERID FROM REQ AFTER SUCCESSFULLY AUTHENTICATE
+    const userId = req.id;
 
     const user = await User.findById(userId).select("-password");
 
@@ -272,8 +272,8 @@ export const checkAuth = async (req: Request, res: Response) => {
 // UPDATE PROFILE CONTROLLER
 export const handleUpdateProfile = async (req: Request, res: Response) => {
   try {
-    const userId = "fdlsjfldjfl"; // TO BE REMOVED
-    // const userId = req.id; // TO BE IMPLEMENT - USER AUTHENTICATION MIDDLEWARE
+    // GETTING USERID FROM REQ AFTER SUCCESSFULLY AUTHENTICATE
+    const userId = req.id;
 
     // GETTING VALUE FOR UPDATE
     const { fullname, email, address, city, country, profilePicture } =

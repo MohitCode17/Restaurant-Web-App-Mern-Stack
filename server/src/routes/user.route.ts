@@ -9,6 +9,7 @@ import {
   handleUpdateProfile,
   handleVerifyEmail,
 } from "../controllers/user.controller";
+import { authenticated } from "../middlewares/authenticated";
 
 const router = express.Router();
 
@@ -31,9 +32,9 @@ router.post("/forgot-password", handleForgotPassword);
 router.post("/reset-password/:token", handleResetPassword);
 
 // CHECK USER AUTH STATUS ROUTE
-router.get("/check-auth", checkAuth);
+router.get("/check-auth", authenticated, checkAuth);
 
 // UPDATE PROFILE ROUTE
-router.put("/profile/update", handleUpdateProfile);
+router.put("/profile/update", authenticated, handleUpdateProfile);
 
 export default router;
