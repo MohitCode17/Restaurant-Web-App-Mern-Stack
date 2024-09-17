@@ -168,3 +168,47 @@ export const handleUpdateOrderStatus = async (req: Request, res: Response) => {
     });
   }
 };
+
+// SEARCH RESTAURANT CONTROLLER
+export const searchRestaurant = async (req: Request, res: Response) => {
+  try {
+    const searchText = req.params.searchText || "";
+    const searchQuery = req.query.searchQuery || "";
+
+    const selectedCuisines = ((req.query.selectedCuisines as string) || "")
+      .split(",")
+      .filter((cuisine) => cuisine);
+
+    const query: any = {};
+
+    if (searchText) {
+      query.$or = [
+        { restaurantName: { $regex: searchText, $options: "i" } },
+        { city: { $regex: searchText, $options: "i" } },
+        { country: { $regex: searchText, $options: "i" } },
+      ];
+    }
+
+    if (searchQuery) {
+      query.$or = [
+        { restaurantName: { $regex: searchQuery, $options: "i" } },
+        { cuisines: { $regex: searchQuery, $options: "i" } },
+      ];
+    }
+
+    if (selectedCuisines.length > 0) {
+      query.cuisines = { $in: selectedCuisines };
+    }
+
+    const restaurants = await Restaurant.find(query);
+    return res.status(200).json({
+      success: true,
+      data: restaurants,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};

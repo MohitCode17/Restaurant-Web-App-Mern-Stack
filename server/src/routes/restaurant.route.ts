@@ -6,6 +6,7 @@ import {
   handleGetRestaurantOrder,
   handleUpdateOrderStatus,
   handleUpdateRestaurant,
+  searchRestaurant,
 } from "../controllers/restaurant.controller";
 
 const router = express.Router();
@@ -24,5 +25,8 @@ router.get("/order", authenticated, handleGetRestaurantOrder);
 
 // UPDATE ORDER STATUS ROUTE
 router.put("/order/:orderId/status", authenticated, handleUpdateOrderStatus);
+
+// SEARCH ROUTE
+router.get("/search/:searchText", authenticated, searchRestaurant);
 
 export default router;
