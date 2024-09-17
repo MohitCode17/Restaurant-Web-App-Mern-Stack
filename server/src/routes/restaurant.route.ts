@@ -3,6 +3,7 @@ import { authenticated } from "../middlewares/authenticated";
 import {
   handleCreateRestaurant,
   handleGetRestaurant,
+  handleGetRestaurantOrder,
   handleUpdateRestaurant,
 } from "../controllers/restaurant.controller";
 
@@ -16,5 +17,8 @@ router.get("/", authenticated, handleGetRestaurant);
 
 // UPDATE RESTAURANT ROUTE
 router.put("/", authenticated, handleUpdateRestaurant);
+
+// GET ORDERS ROUTE
+router.get("/order", authenticated, handleGetRestaurantOrder);
 
 export default router;

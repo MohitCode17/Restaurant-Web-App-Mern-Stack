@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Restaurant from "../models/restaurant.model";
+import Order from "../models/order.model";
 
 // CREATE A RESTAURANT CONTROLLER
 export const handleCreateRestaurant = async (req: Request, res: Response) => {
@@ -104,6 +105,33 @@ export const handleUpdateRestaurant = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "Restaurant updated.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// GET RESTAURANT ORDERS
+export const handleGetRestaurantOrder = async (req: Request, res: Response) => {
+  try {
+    const restaurant = await Restaurant.findById({ user: req.id });
+
+    if (!restaurant)
+      return res.status(400).json({
+        success: false,
+        message: "Restaurant not found",
+      });
+
+    const orders = await Order.find({ restaurant: restaurant._id })
+      .populate("restaurant")
+      .populate("user");
+
+    return res.status(200).json({
+      success: true,
+      orders,
     });
   } catch (error) {
     return res.status(500).json({
