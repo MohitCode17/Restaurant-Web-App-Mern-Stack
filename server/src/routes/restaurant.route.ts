@@ -4,6 +4,7 @@ import {
   handleCreateRestaurant,
   handleGetRestaurant,
   handleGetRestaurantOrder,
+  handleGetSingleRestaurant,
   handleUpdateOrderStatus,
   handleUpdateRestaurant,
   searchRestaurant,
@@ -28,5 +29,8 @@ router.put("/order/:orderId/status", authenticated, handleUpdateOrderStatus);
 
 // SEARCH ROUTE
 router.get("/search/:searchText", authenticated, searchRestaurant);
+
+// GET SINGLE RESTAURANT ROUTE
+router.get("/:id", authenticated, handleGetSingleRestaurant);
 
 export default router;
