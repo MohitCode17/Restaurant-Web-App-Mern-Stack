@@ -1,6 +1,9 @@
 import express from "express";
 import { authenticated } from "../middlewares/authenticated";
-import { handleCreateMenu } from "../controllers/menu.controller";
+import {
+  handleCreateMenu,
+  handleEditMenu,
+} from "../controllers/menu.controller";
 
 const router = express.Router();
 
@@ -8,5 +11,6 @@ const router = express.Router();
 router.post("/", authenticated, handleCreateMenu);
 
 // EDIT MENU ROUTE
+router.put("/:id", authenticated, handleEditMenu);
 
 export default router;
